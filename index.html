@@ -14,7 +14,7 @@
     <style>
         body {padding: 0; margin: 0 }
         html, body, #map { height: 100% }
-
+        table { border-collapse: collapse;}
         .info {
             padding: 6px 8px;
             font: 14px/16px Arial, Helvetica, sans-serif;
@@ -23,13 +23,19 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
         }
-
+        .change {padding-left:3px;font-size:14px;}
+        .green { color: #090 }
+        .red {color:#900 }
 
         .info h4 {
             margin: 0 0 5px;
             color: #777;
         }
-
+        .history {
+            margin: 10px 0 0 0;
+            font-weight:bold;
+            color: #777;
+        }
         .legend {
             text-align: left;
             line-height: 18px;
@@ -61,10 +67,61 @@
 
         var dataSet = function() {
 
-            var currentDataSet = 'haushalte';
-            var currentSubSet = 6;
-
             var openData = {
+                'arbeitslose' : {
+                    'title' : 'Anzahl der Arbeitslosen',
+                    'unit' : 'Personen',
+                    'headlines' :  [ 2010,2011,2012,2013,2014 ],
+                    'default' : 4,
+                    'limits' : [0,50,100,150,200,250,300,350,400,500,600],
+                    'data' : {
+                        11 : [ 29,32,31,36,36 ],
+                        12 : [ 25,25,27,17,21 ],
+                        13 : [ 35,33,32,33,45 ],
+                        14 : [ 44,46,42,42,37 ],
+                        15 : [ 25,24,22,32,26 ],
+                        21 : [ 75,70,90,94,94 ],
+                        22 : [ 268,307,346,359,334 ],
+                        23 : [ 38,38,39,49,43 ],
+                        24 : [ 214,235,229,236,248 ],
+                        25 : [ 123,144,127,129,130 ],
+                        26 : [ 133,112,132,140,146 ],
+                        27 : [ 221,217,224,221,221 ],
+                        28 : [ 83,83,93,91,94 ],
+                        29 : [ 26,25,28,35,37 ],
+                        31 : [ 129,141,133,133,132 ],
+                        32 : [ 289,251,307,287,303 ],
+                        33 : [ 240,246,274,280,291 ],
+                        34 : [ 170,177,170,171,163 ],
+                        43 : [ 30,39,34,38,35 ],
+                        44 : [ 129,138,157,148,133 ],
+                        45 : [ 229,202,239,225,193 ],
+                        46 : [ 171,151,180,189,181 ],
+                        47 : [ 309,309,336,346,327 ],
+                        51 : [ 469,493,553,544,556 ],
+                        52 : [ 96,112,106,106,120 ],
+                        54 : [ 207,165,196,169,204 ],
+                        56 : [ 111,120,114,151,142 ],
+                        57 : [ 230,216,214,223,235 ],
+                        58 : [ 154,167,168,189,184 ],
+                        61 : [ 696,723,766,728,698 ],
+                        62 : [ 201,197,209,186,181 ],
+                        63 : [ 625,645,666,646,591 ],
+                        68 : [ 72,68,72,63,81 ],
+                        71 : [ 182,200,237,238,217 ],
+                        76 : [ 64,66,77,74,77 ],
+                        77 : [ 166,171,169,195,222 ],
+                        81 : [ 141,149,153,155,187 ],
+                        82 : [ 150,162,166,159,167 ],
+                        86 : [ 320,335,365,349,368 ],
+                        87 : [ 198,206,233,216,243 ],
+                        91 : [ 281,302,321,346,306 ],
+                        95 : [ 111,120,132,126,119 ],
+                        96 : [ 356,326,369,381,348 ],
+                        97 : [ 292,287,286,298,284 ],
+                        98 : [ 94,114,121,108,109 ]
+                    },
+                },
                 'haushalte': {
                     'title': 'Anzahl der Haushalte',
                     'unit': 'Haushalte',
@@ -121,15 +178,33 @@
                 }
             };
 
+            var currentDataSet = 'undef';
+            var currentSubSet = 0;
 
-
-
+            function selectDataSet( dsname ) {
+                currentDataSet = dsname;
+                currentSubSet = openData[dsname].default;
+            }
 
             function getTitle() { return openData[currentDataSet].title; }
             function getUnit() { return openData[currentDataSet].unit; }
             function getLimits() { return openData[currentDataSet].limits}
             function getDataItem( stadtteilNr ) {
                 return openData[currentDataSet]['data'][stadtteilNr][currentSubSet];
+            }
+            function getDataTable( stadtteilNr ) { 
+                var table = {};
+                var lastVal = 0;
+                var hls = openData[currentDataSet].headlines;
+                for (var i = 0; i < hls.length; i++ ) {
+                    if ( hls[i]) {
+                        var currentVal = openData[currentDataSet]['data'][stadtteilNr][i];
+                        var change = lastVal ? currentVal - lastVal  : 0; 
+                        table[ hls[i] ] = [ currentVal , change ];
+                        lastVal = currentVal;
+                    }
+                }                
+                return table;
             }
             function getDataItemColor( stadtteilNr ) {
                 var currentVal = getDataItem( stadtteilNr );
@@ -142,7 +217,7 @@
                     break;
                   }
                 }
-                return mapColors[currentNr]
+                return mapColors[currentNr];
             }
 
             return {
@@ -150,9 +225,14 @@
                 getTitle:getTitle,
                 getLimits:getLimits,
                 getDataItem:getDataItem,
+                getDataTable:getDataTable,
+                selectDataSet:selectDataSet,
                 getDataItemColor:getDataItemColor
-            }
+            };
         }();
+
+
+        dataSet.selectDataSet( 'arbeitslose' );
 
         function getColor( i ) {
             return mapColors[i];
@@ -184,6 +264,18 @@
             html = html +  (props ?
                 '<b>' + props.Name + '</b><br />' + dataSet.getDataItem( props.Nr ) +' '+ dataSet.getUnit() + ' '
                 : 'Navigieren Sie über einen Stadtteil');
+
+            // draw nice history table
+            if ( props ) {
+                html += '<div class="history">Historie</div> <table>';
+                var hls = dataSet.getDataTable( props.Nr );
+                $.each( hls, function( key, value ) {
+                  html += '<tr><td>' + key + ':</td><th>' + value[0] + '</th><td class="change '
+                  + ( value[1] > 0 ? "green" : "red" ) + '">' + ( value[1] ? ( value[1] > 0 ? '+' : '' ) + value[1] : '' ) + '</td></tr>';
+                });
+                html += '</table>';
+                console.log( "html", html );
+            }
 
 
             this._div.innerHTML = html;
