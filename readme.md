@@ -5,13 +5,19 @@ Mit Hilfe dieser Datenvisualisierung kann man nun vielleicht interessante Zusamm
 Oder einfach nur etwas spannendes über seinen Stadtteil herausfinden.
 :+1: 
 
+Link: http://codeformuenster.org/open-data-karte-muenster
+
 ## Referenzen
 ### Datenquellen
 - Jahres-Statistiken der Stadt Münster: http://www.muenster.de/stadt/stadtplanung/zahlen.html
 - Open-Data Repository von Code4Münster: https://github.com/codeformuenster/open-data
 
 ### Genutzte Tools: 
-- http://mapshaper.org/ => JSON Dateien aufräumen und optimieren
-- http://frankrowe.org/ugis/ => JSON Ansehen und bearbeiten
+- http://frankrowe.org/ugis/ => GeoJSON ansehen und bearbeiten
+- http://mapshaper.org/ => GeoJSON Dateien aufräumen und optimieren
 - http://leafletjs.com/ => Javascript Kartendarstellungs-Bibliothek
 - http://mapbox.com/ => Karten-Provider
+- http://www.strangeplanet.fr/work/gradient-generator/index.php - Color Gradient Generator
+
+### Design-Inspiration: 
+- http://leafletjs.com/examples/choropleth.html
