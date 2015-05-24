@@ -26,11 +26,15 @@
         .change {padding-left:3px;font-size:14px;}
         .green { color: #090 }
         .red {color:#900 }
-
-        .info h4 {
+        .changer  {margin-top:20px; display:block!important;}
+        .selector {float:right;}
+        tr.high td {font-weight:bold;}
+        .info strong {
+            display:block;
             margin: 0 0 5px;
             color: #777;
         }
+        .topmargin {margin-top:10px;}
         .history {
             margin: 10px 0 0 0;
             font-weight:bold;
@@ -48,15 +52,59 @@
             margin-right: 8px;
             opacity: 0.7;
         }
+        .nextone {width:100%;}
         @media (min-width: 800px) {
             .info { font-size:24px;line-height:26px;}
             .legend i {width: 26px;height: 26px;}
-
+            .rtext {font-size:24px;}
+        }
 
     </style>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
 </head>
 <body>
     <div id="map"></div>
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h3 class="modal-title" id="myModalLabel">Open Data Karte Münster - Datensatz auswählen</h3>
+          </div>
+          <div class="modal-body">
+            Bitte wählen Sie aus, welchen Datensatz Sie in der Karte anzeigen möchten:
+
+            <div class="bs-example topmargin" data-example-id="block-btns">
+                <div class="well center-block" id="dataSelector">
+                </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
 
     <script type="text/javascript" src="maps/Ebene_2_Stadtteil.geojson.js"></script>
     <script type="text/javascript">
@@ -68,9 +116,65 @@
         var dataSet = function() {
 
             var openData = {
+                'wohnberechtigte' : {
+                    'title' : 'Wohnberechtigte nach Alter',
+                    'unit': 'Personen',
+                    'default': 3,
+                    'limits' : [ 0, 100,200, 400, 600, 800,1000,2000,3000,4000,5000 ],
+                    'headlines':[ '',"0 - 9","10 - 19","20 - 29","30 - 39","40 - 49","50 - 59","60 - 69","70 - 79","80 - 89","90 u. mehr" ],
+                    'data' : {
+                        11 : [ 1450,83,73,402,232,162,137,98,144,80,39 ],
+                        12 : [ 1354,35,77,601,213,128,89,77,73,48,13 ],
+                        13 : [ 2199,74,82,737,409,231,192,148,189,120,17 ],
+                        14 : [ 2432,81,103,890,343,253,186,131,155,184,106 ],
+                        15 : [ 1384,47,74,497,229,141,146,85,103,54,8 ],
+                        21 : [ 4522,167,223,1701,841,378,352,200,297,270,93 ],
+                        22 : [ 8688,392,375,3082,1739,952,845,513,473,262,55 ],
+                        23 : [ 1251,45,36,612,243,108,91,45,38,28,5 ],
+                        24 : [ 6932,336,275,2393,1579,807,704,398,257,163,20 ],
+                        25 : [ 6260,396,331,1798,1259,846,705,425,324,145,31 ],
+                        26 : [ 5284,410,407,962,868,785,693,486,440,196,37 ],
+                        27 : [ 12524,785,733,3282,2162,1589,1525,1134,817,383,114 ],
+                        28 : [ 4338,187,296,1984,669,351,331,248,174,74,24 ],
+                        29 : [ 2210,132,114,531,344,217,273,183,211,151,54 ],
+                        31 : [ 5479,418,430,931,730,675,750,562,590,333,60 ],
+                        32 : [ 8976,684,650,1832,1467,1232,1218,829,622,347,95 ],
+                        33 : [ 7688,482,406,2290,1624,916,822,467,420,203,58 ],
+                        34 : [ 7036,570,682,961,847,1080,1037,687,647,431,94 ],
+                        43 : [ 1045,49,23,410,246,122,74,45,43,25,8 ],
+                        44 : [ 5202,301,285,1188,886,611,584,346,470,388,143 ],
+                        45 : [ 10220,681,721,1841,1665,1386,1519,886,866,550,105 ],
+                        46 : [ 8099,669,880,1306,979,1131,1319,677,678,384,76 ],
+                        47 : [ 8605,755,643,2023,1376,1174,1088,686,532,268,60 ],
+                        51 : [ 21155,2145,2486,5899,2872,2664,2177,1370,913,516,113 ],
+                        52 : [ 7631,532,743,2949,860,707,707,435,369,243,86 ],
+                        54 : [ 9250,643,1133,1505,819,1363,1563,921,812,424,67 ],
+                        56 : [ 6244,762,805,570,781,1013,935,592,514,235,37 ],
+                        57 : [ 9082,986,956,1174,1190,1424,1230,904,815,351,52 ],
+                        58 : [ 6769,593,646,954,800,899,960,751,805,324,37 ],
+                        61 : [ 10555,1382,1257,1382,1310,1388,1526,918,868,449,75 ],
+                        62 : [ 4998,476,463,704,636,672,784,546,466,222,29 ],
+                        63 : [ 10513,1148,1122,1459,1138,1255,1573,1239,1058,454,67 ],
+                        68 : [ 3102,312,363,285,333,491,496,323,323,156,20 ],
+                        71 : [ 10317,889,930,1121,1304,1623,1626,1063,1068,603,90 ],
+                        76 : [ 3692,384,404,338,389,609,600,438,357,151,22 ],
+                        77 : [ 8017,886,909,692,838,1263,1221,785,945,395,83 ],
+                        81 : [ 4932,445,593,707,563,793,827,435,354,181,34 ],
+                        82 : [ 6522,610,769,724,762,1087,1072,623,537,291,47 ],
+                        86 : [ 7930,824,846,943,975,1088,1196,846,787,365,60 ],
+                        87 : [ 8981,846,952,824,977,1347,1456,1038,1070,402,69 ],
+                        91 : [ 5640,575,634,775,738,710,789,513,523,307,76 ],
+                        95 : [ 6350,450,636,584,599,860,1071,893,895,325,37 ],
+                        96 : [ 9881,745,888,1224,1189,1433,1428,1058,1166,620,130 ],
+                        97 : [ 9284,882,1113,1007,1072,1471,1635,1069,779,230,26 ],
+                        98 : [ 6244,697,804,540,778,1099,866,581,588,251,40 ],
+                    },
+                    'tableTitle' : 'Gestaffelt nach Alter'
+                },
                 'arbeitslose' : {
                     'title' : 'Anzahl der Arbeitslosen',
                     'unit' : 'Personen',
+                    'extra' : 'showChange',
                     'headlines' :  [ 2010,2011,2012,2013,2014 ],
                     'default' : 4,
                     'limits' : [0,50,100,150,200,250,300,350,400,500,600],
@@ -125,6 +229,7 @@
                 'haushalte': {
                     'title': 'Anzahl der Haushalte',
                     'unit': 'Haushalte',
+                    'extra' : 'showChange',                    
                     'headlines': [ '','','2010','2011','2012','2013','2014' ],
                     'default': 6,
                     'limits' : [ 0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000 ],
@@ -182,16 +287,19 @@
             var currentSubSet = 0;
 
             function selectDataSet( dsname ) {
-                currentDataSet = dsname;
-                currentSubSet = openData[dsname].default;
+                if  ( !dsname ) { dsname = "arbeitslose-4"; }
+                var myArray = /^(.+)-(\d+)$/g.exec(dsname);
+                currentDataSet = myArray ? myArray[1] : dsname;
+                currentSubSet = myArray ? myArray[2] : openData[dsname].default;
+                if  ( !openData[currentDataSet].headlines[currentSubSet] ) { location.href="?"; }
+                showDataSelector(  );
             }
-
-            function getTitle() { return openData[currentDataSet].title; }
+            function getDataSet() { return openData[currentDataSet]; }
+            function getData() { return openData; }
+            function getTitle() { return openData[currentDataSet].title + " " + openData[currentDataSet].headlines[currentSubSet]; }
             function getUnit() { return openData[currentDataSet].unit; }
-            function getLimits() { return openData[currentDataSet].limits}
-            function getDataItem( stadtteilNr ) {
-                return openData[currentDataSet]['data'][stadtteilNr][currentSubSet];
-            }
+            function getLimits() { return openData[currentDataSet].limits; }
+            function getDataItem( stadtteilNr ) { return openData[currentDataSet]['data'][stadtteilNr][currentSubSet]; }
             function getDataTable( stadtteilNr ) { 
                 var table = {};
                 var lastVal = 0;
@@ -200,7 +308,7 @@
                     if ( hls[i]) {
                         var currentVal = openData[currentDataSet]['data'][stadtteilNr][i];
                         var change = lastVal ? currentVal - lastVal  : 0; 
-                        table[ hls[i] ] = [ currentVal , change ];
+                        table[ hls[i] ] = [ currentVal , change, ( i == currentSubSet  ? 1: 0 )];
                         lastVal = currentVal;
                     }
                 }                
@@ -220,10 +328,35 @@
                 return mapColors[currentNr];
             }
 
+            // list all datasets for "select dataset" popup
+            function showDataSelector( ) {
+                $.each( openData, function( key, arr ) {
+//                    $("#dataSelector").append('<div class="nextone rtext"><b>' + arr.title + '</b> <button type="button" class="selector btn btn-default" data-id="'+key+'">Datensatz auswählen</button> </div><br clear="all" />');
+
+                    var select_html = '<select class="selector-d form-control input-lg"><option value=""> Auswahl </option>';
+
+                    var len = arr.headlines.length;
+                    for (var i = 0; i < len; i++ ) {
+                        if ( !arr.headlines[i] ) { continue; }
+                        var thiskey = key+"-"+ i;
+                        select_html += '<option value="' + thiskey + '" '+ ( thiskey == ( currentDataSet + '-' + currentSubSet ) ? "selected" : "" ) +'> ' + arr.headlines[i] + '</option>';
+                    }
+                    select_html += '</select>';
+
+                    $("#dataSelector").append('<div class="row topmargin"><div class="col-md-8"><button type="button" data-id="'+key+'" class="selector btn '+ ( (currentDataSet == key) ? "btn-primary" : "btn-default" ) +' btn-lg btn-block">' + arr.title + '</button></div><div class="col-md-4">' + select_html + '</div></div>' ) ;
+
+                });
+                $("#dataSelector").append('<br clear="both" />');
+                $(".selector").click( function( ) { location.href="?" + $( this ).data('id'); });
+                $(".selector-d").change( function() { location.href="?" + $( this ).val(); })
+                console.log("selected dataset", currentDataSet, currentSubSet );
+            }
+
             return {
                 getUnit:getUnit,
                 getTitle:getTitle,
                 getLimits:getLimits,
+                getDataSet:getDataSet,
                 getDataItem:getDataItem,
                 getDataTable:getDataTable,
                 selectDataSet:selectDataSet,
@@ -231,8 +364,11 @@
             };
         }();
 
-
-        dataSet.selectDataSet( 'arbeitslose' );
+        var showData = location.search.substr( 1 );
+        if ( !showData ) {
+            $('#myModal').modal('show');
+        }
+        dataSet.selectDataSet( showData );
 
         function getColor( i ) {
             return mapColors[i];
@@ -242,7 +378,8 @@
 
         L.tileLayer(
             'http://{s}.tiles.mapbox.com/v3/tomrocket.m8l1e9gm/{z}/{x}/{y}.png', {
-                maxZoom: 20,
+                maxZoom: 16,
+                minZoom: 11,
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
                     '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
                     'Imagery © <a href="http://mapbox.com">Mapbox</a>',                 
@@ -260,21 +397,26 @@
         };
 
         info.update = function (props) {
-            var html = '<h4>'+ dataSet.getTitle() +'</h4>';
+            var html = '<strong>'+ dataSet.getTitle() +'</strong>';
             html = html +  (props ?
                 '<b>' + props.Name + '</b><br />' + dataSet.getDataItem( props.Nr ) +' '+ dataSet.getUnit() + ' '
                 : 'Navigieren Sie über einen Stadtteil');
 
             // draw nice history table
             if ( props ) {
-                html += '<div class="history">Historie</div> <table>';
                 var hls = dataSet.getDataTable( props.Nr );
+                var tbl = dataSet.getDataSet( );
+                var htitle = tbl.tableTitle || "Historie";
+                html += '<div class="history">' + htitle + '</div> <table>';
                 $.each( hls, function( key, value ) {
-                  html += '<tr><td>' + key + ':</td><th>' + value[0] + '</th><td class="change '
-                  + ( value[1] > 0 ? "green" : "red" ) + '">' + ( value[1] ? ( value[1] > 0 ? '+' : '' ) + value[1] : '' ) + '</td></tr>';
+                  html += value[2] ? '<tr class="high">' : '<tr>';
+                  html += '<td>' + key + ':</td><th>' + value[0] + '</th>';
+                  if ( tbl.extra == "showChange" ) {
+                    html += '<td class="change ' + ( value[1] > 0 ? "green" : "red" ) + '">' + ( value[1] ? ( value[1] > 0 ? '+' : '' ) + value[1] : '' ) + '</td>';
+                  }
+                  html += '</tr>';
                 });
                 html += '</table>';
-                console.log( "html", html );
             }
 
 
@@ -360,12 +502,24 @@
                     from + (to ? '&ndash;' + to : '+'));
             }
 
-            div.innerHTML = labels.join('<br>');
+            div.innerHTML = labels.join('<br>') + '<button type="button" class="changer btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Datensatz ändern</button>';
             return div;
         };
 
         legend.addTo(map);
 
     </script>
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
