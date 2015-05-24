@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <title>Open Data Karte Münster</title>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+        <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+        <link rel="stylesheet" href="libs/leaflet.label.css" />
+        <script src="libs/leaflet.label.js"></script>
+
+
+        <style>
+        body {padding: 0; margin: 0 }
+        html, body, #map { height: 100% }
+        #title {
+            padding:4px 20px;
+			position:absolute; top:0px; right:0px; 
+			z-index: 100;
+			opacity:0.6;
+            background-color:black;
+            border-bottom:2px solid white;
+            border-left:2px solid white;
+			color:white;
+            font-family: Helvetica,Arial;
+    	    font-size: 35px;
+    		line-height: 30px;
+        }
+        #title img {float:left;height:92px;}
+        #title .button {
+            font-size:12px;
+        }
+        #nav-overlay {
+			position:absolute; bottom:0px; left:0px; 
+			z-index: 100;
+			opacity:0.6;
+        }
+        #nav-overlay .icon {
+        	width:70px;
+        	height:70px;
+        }
+        .nav-icon { fill:red ; width:90px;height:30px;}
+        .nav-icon:hover {fill:white!important:opacity:1;background-color:white;}
+
+
+
+
+        </style>
+  </head>
+
+  <body>
+
+<div id="hidden-div-icon"></div>
+
+    <div id="nav-overlay"> 
+
+
+    </div>
+    <div id="title"> 
+    	<span class="button removeLayer">beta v0.01 &nbsp;</span>
+    	Open Data Karte M&uuml;nster
+        <select name="dataSelector" id="dataSelector">
+            <option value=""> -- Bitte auswählen -- </option>
+            <option value="haushalte2010" selected > Haushalte 2010 </option>
+        </select>
+    </div>
+    <div style="z-index:2" id="map"></div>
+    
+
+        <script type ="text/javascript">
+
+
+
+        var basemap = L.tileLayer(
+                'http://{s}.tiles.mapbox.com/v3/tomrocket.m8l1e9gm/{z}/{x}/{y}.png',
+                                  {     maxZoom: 20     }
+        );
+
+        var hiStyle = {
+		    "color": "#ff3322",
+		    "weight": 3,
+		    "opacity": 1
+		};
+		var loStyle = { // highlight the feature
+		    "color": "#f8f8f8",
+		    "weight": 2,
+		    "opacity": 1,
+		    fillOpacity: 0.8
+		};
+
+        var parteiStyles = {
+            spd: {
+                color: "#ff0000"
+            },
+            gruene: {
+                color: "#00ff00"
+            },
+            cdu: {
+                color:"#000000"
+            }
+
+        }
+		function highlightFeature(e) {
+            //this.openPopup();
+		    var layer = e.target;
+		    layer.setStyle(hiStyle);
+		}
+		function resetHighlight(e) {
+            //this.closePopup();
+            var layer = e.target;
+            layer.setStyle(loStyle);
+		}
+
+        function showLayer( layerName ) {
+
+            $.getJSON('maps/wahlbezirke_ms_data_2014.geojson', function(data) {
+                var geojson = L.geoJson(data, {
+                  style: loStyle,
+                  onEachFeature: function (feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight,
+                    });
+                    layer.setStyle( parteiStyles[feature.properties.winner] );
+                    layer.bindPopup( "Nr. " + feature.properties.bezirk_nr + "<br /><b>" + feature.properties.bezirkname + "</b><br /><i>" + feature.properties.winner+": "+ feature.properties[feature.properties.winner + "_votes_percentage"] +"%</i>" );
+                    console.log("hey feature",  feature.properties.stand_nr );
+                  }
+                });
+                var map = L.map('map').setView([ 51.962, 7.629], 11);
+                basemap.addTo(map);
+                geojson.addTo(map);
+            });
+
+
+        }
+
+
+        var haushalte = {
+          //  BezirkNummer : ["BezirkName",,2010,2011,2012,2013,2014],
+            11 : ["Aegidii",,903,998,1001,995,959],
+            12 : ["Überwasser",,954,1073,1049,1054,1019],
+            13 : ["Dom",,1508,1642,1602,1611,1585],
+            14 : ["Buddenturm",,1401,1538,1546,1583,1589],
+            15 : ["Martini",,931,1017,1024,1025,1027],
+            21 : ["Pluggendorf",,2761,3079,3072,3098,3140],
+            22 : ["Josef",,5640,6046,6031,6227,6217],
+            23 : ["Bahnhof",,818,895,880,936,968],
+            24 : ["Hansaplatz",,4655,5015,5024,4981,5024],
+            25 : ["Mauritz-West",,3978,4257,4238,4252,4282],
+            26 : ["Schlachthof",,2856,3062,3101,3139,3145],
+            27 : ["Kreuz",,7678,8287,8266,8223,8235],
+            28 : ["Neutor",,2717,3159,3071,3004,3005],
+            29 : ["Schloss",,1185,1314,1295,1304,1303],
+            31 : ["Aaseestadt",,2990,3108,3132,3159,3121],
+            32 : ["Geist",,5093,5342,5328,5350,5411],
+            33 : ["Schützenhof",,4707,5063,5063,5148,5152],
+            34 : ["Düesberg",,3410,3485,3504,3543,3549],
+            43 : ["Hafen",,727,801,785,793,776],
+            44 : ["Herz-Jesu",,2759,2911,2926,2904,2956],
+            45 : ["Mauritz-Mitte",,5944,6181,6117,6211,6241],
+            46 : ["Rumphorst",,3990,4153,4212,4286,4265],
+            47 : ["Uppenberg",,4604,4990,5024,5079,5117],
+            51 : ["Gievenbeck",,8998,10170,10428,10661,10748],
+            52 : ["Sentrup",,3766,4339,4422,4451,4542],
+            54 : ["Mecklenbeck",,4407,4697,4206,4306,4570],
+            56 : ["Albachten",,2324,2414,2464,2504,2558],
+            57 : ["Roxel",,3953,4185,4254,4264,4336],
+            58 : ["Nienberge",,3196,3395,3391,3440,3433],
+            61 : ["Coerde",,4506,4673,4714,4791,4885],
+            62 : ["Kinderhaus-Ost",,2560,2623,2628,2649,2661],
+            63 : ["Kinderhaus-West",,4678,4905,4895,4913,4914],
+            68 : ["Sprakel",,1260,1269,1298,1332,1364],
+            71 : ["Mauritz-Ost",,5004,5200,5295,5343,5375],
+            76 : ["Gelmer-Dyckburg",,1536,1584,1625,1658,1682],
+            77 : ["Handorf",,3290,3421,3474,3476,3521],
+            81 : ["Gremmendorf-West",,2163,2215,2225,2367,2430],
+            82 : ["Gremmendorf-Ost",,2907,2978,3012,3080,3109],
+            86 : ["Angelmodde",,3528,3626,3655,3831,3857],
+            87 : ["Wolbeck",,3927,4025,4062,4137,4183],
+            91 : ["Berg Fidel",,2491,2580,2583,2586,2614],
+            95 : ["Hiltrup-Ost",,2968,3016,2986,2995,3014],
+            96 : ["Hiltrup-Mitte",,4947,5093,5150,5164,5166],
+            97 : ["Hiltrup-West",,3938,4083,4174,4208,4278],
+            98 : ["Amelsbüren",,2322,2384,2422,2439,2426]
+
+        }
+        
+
+
+        function createCenterPoint(that ) {
+
+          var latlngs = that.getLatLngs();
+          var nPoint = latlngs.length;
+
+          var lats = [];
+          var lngs = [];
+          for(var i = 0; i < nPoint; i++) {
+            lats.push(latlngs[i].lat);
+            lngs.push(latlngs[i].lng);
+          }
+
+          var minLat = Math.min.apply(null, lats);
+          var maxLat = Math.max.apply(null, lats);
+          var minLng = Math.min.apply(null, lngs);
+          var maxLng = Math.max.apply(null, lngs);
+
+          var pointM = {
+            lat: (minLat + maxLat) / 2,
+            lng: (minLng + maxLng) / 2
+          };
+          return pointM;
+        };
+
+
+
+        // generated with: http://www.strangeplanet.fr/work/gradient-generator/index.php
+        var mycolors = ["#FF0000", "#FE1C00", "#FD3800", "#FC5500", "#FB7100", "#FA8D00", "#F9AA00", "#F8C600", "#F7E200", "#F7FF00"]
+
+
+        var navOverlay = $("#nav-overlay");
+        $.each(mycolors, function( index, value ) {
+            navOverlay.append('<div class="nav-icon" style="background-color:'+value+'">' + (index*1000) +" - " + ((index+1)*1000) + '</div>')
+          
+        });
+
+        var map = L.map('map').setView([ 51.962, 7.629], 11);
+        var hiddenMarker = L.divIcon({className: 'hidden-div-icon'});
+
+        $.getJSON('maps/Ebene_2_Stadtteil.geojson', function(data) {
+            var geojson = L.geoJson(data, {
+              style: loStyle,
+              onEachFeature: function (feature, layer) {
+                /*layer.on({
+                    mouseover: highlightFeature,
+                    mouseout: resetHighlight,
+                });*/
+                var bezirkNr = feature.properties.Nr;
+                var number =  haushalte[bezirkNr][2];
+                var colorcode = Math.floor( number/1000 )
+                layer.setStyle( {
+                   color: mycolors[colorcode]
+                } );
+                layer.bindPopup("<b>" + feature.properties.Name + "</b><br /><i>" + number +" Haushalte 2010</i>" );
+                var mp = createCenterPoint( layer );
+                
+                L.marker( mp, {icon: hiddenMarker } ).bindLabel(  "" + number, { noHide : true} ).addTo(map).showLabel(); 
+
+              }
+            });
+            basemap.addTo(map);
+            geojson.addTo(map);
+
+            $(".removeLayer").click( function() {
+                map.removeLayer( geojson );
+            });
+
+
+        });
+
+
+  </script>
+ </body>
+</html>
