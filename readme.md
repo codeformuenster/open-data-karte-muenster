@@ -21,3 +21,9 @@ Link: http://codeformuenster.org/open-data-karte-muenster
 
 ### Design-Inspiration: 
 - http://leafletjs.com/examples/choropleth.html
+
+
+### Vorbild
+
+Die Stadt Köln hat ein ähnliches Tool auf der städtischen Homepage: 
+https://www.stadt-koeln.de/politik-und-verwaltung/statistik/statistische-daten-thematische-karte
