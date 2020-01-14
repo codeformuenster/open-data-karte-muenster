@@ -1,4 +1,4 @@
-var mapColors = [
+const mapColors = [
   "#FFFFFF",
   "#FFF1D5",
   "#FFE4AB",
@@ -11,7 +11,6 @@ var mapColors = [
   "#BD2509",
   "#AD0000"
 ];
-//["#FF0000", "#FE1C00", "#FD3800", "#FC5500", "#FB7100", "#FA8D00", "#F9AA00", "#F8C600", "#F7E200", "#F7FF00", "#FAFF33"];
 
 var dataSet = function () {
   var openData = {
@@ -219,7 +218,7 @@ var dataSet = function () {
         32: [22687, 173, 2384, 2921, 2390, 3229, 3980, 1609, 6002],
         33: [12731, 152, 2422, 2437, 2095, 2232, 1376, 655, 1362],
         34: [17866, 97, 1586, 2143, 1957, 3143, 2865, 1558, 4517],
-        43: [1774, 25, 352, 345, 322, 397, 192, ,],
+        43: [1774, 25, 352, 345, 322, 397, 192, 0, 0],
         44: [10913, 122, 1450, 1699, 1354, 1840, 1662, 777, 2010],
         45: [37360, 191, 3097, 4483, 3621, 5652, 4524, 2174, 13618],
         46: [20796, 109, 1978, 2630, 2519, 3939, 3651, 1466, 4503],
@@ -315,63 +314,63 @@ var dataSet = function () {
       'default': 6,
       'limits': [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
       'data': {
-        11: ["Aegidii", , 903, 998, 1001, 995, 959],
-        12: ["Überwasser", , 954, 1073, 1049, 1054, 1019],
-        13: ["Dom", , 1508, 1642, 1602, 1611, 1585],
-        14: ["Buddenturm", , 1401, 1538, 1546, 1583, 1589],
-        15: ["Martini", , 931, 1017, 1024, 1025, 1027],
-        21: ["Pluggendorf", , 2761, 3079, 3072, 3098, 3140],
-        22: ["Josef", , 5640, 6046, 6031, 6227, 6217],
-        23: ["Bahnhof", , 818, 895, 880, 936, 968],
-        24: ["Hansaplatz", , 4655, 5015, 5024, 4981, 5024],
-        25: ["Mauritz-West", , 3978, 4257, 4238, 4252, 4282],
-        26: ["Schlachthof", , 2856, 3062, 3101, 3139, 3145],
-        27: ["Kreuz", , 7678, 8287, 8266, 8223, 8235],
-        28: ["Neutor", , 2717, 3159, 3071, 3004, 3005],
-        29: ["Schloss", , 1185, 1314, 1295, 1304, 1303],
-        31: ["Aaseestadt", , 2990, 3108, 3132, 3159, 3121],
-        32: ["Geist", , 5093, 5342, 5328, 5350, 5411],
-        33: ["Schützenhof", , 4707, 5063, 5063, 5148, 5152],
-        34: ["Düesberg", , 3410, 3485, 3504, 3543, 3549],
-        43: ["Hafen", , 727, 801, 785, 793, 776],
-        44: ["Herz-Jesu", , 2759, 2911, 2926, 2904, 2956],
-        45: ["Mauritz-Mitte", , 5944, 6181, 6117, 6211, 6241],
-        46: ["Rumphorst", , 3990, 4153, 4212, 4286, 4265],
-        47: ["Uppenberg", , 4604, 4990, 5024, 5079, 5117],
-        51: ["Gievenbeck", , 8998, 10170, 10428, 10661, 10748],
-        52: ["Sentrup", , 3766, 4339, 4422, 4451, 4542],
-        54: ["Mecklenbeck", , 4407, 4697, 4206, 4306, 4570],
-        56: ["Albachten", , 2324, 2414, 2464, 2504, 2558],
-        57: ["Roxel", , 3953, 4185, 4254, 4264, 4336],
-        58: ["Nienberge", , 3196, 3395, 3391, 3440, 3433],
-        61: ["Coerde", , 4506, 4673, 4714, 4791, 4885],
-        62: ["Kinderhaus-Ost", , 2560, 2623, 2628, 2649, 2661],
-        63: ["Kinderhaus-West", , 4678, 4905, 4895, 4913, 4914],
-        68: ["Sprakel", , 1260, 1269, 1298, 1332, 1364],
-        71: ["Mauritz-Ost", , 5004, 5200, 5295, 5343, 5375],
-        76: ["Gelmer-Dyckburg", , 1536, 1584, 1625, 1658, 1682],
-        77: ["Handorf", , 3290, 3421, 3474, 3476, 3521],
-        81: ["Gremmendorf-West", , 2163, 2215, 2225, 2367, 2430],
-        82: ["Gremmendorf-Ost", , 2907, 2978, 3012, 3080, 3109],
-        86: ["Angelmodde", , 3528, 3626, 3655, 3831, 3857],
-        87: ["Wolbeck", , 3927, 4025, 4062, 4137, 4183],
-        91: ["Berg Fidel", , 2491, 2580, 2583, 2586, 2614],
-        95: ["Hiltrup-Ost", , 2968, 3016, 2986, 2995, 3014],
-        96: ["Hiltrup-Mitte", , 4947, 5093, 5150, 5164, 5166],
-        97: ["Hiltrup-West", , 3938, 4083, 4174, 4208, 4278],
-        98: ["Amelsbüren", , 2322, 2384, 2422, 2439, 2426]
+        11: ["Aegidii", 0, 903, 998, 1001, 995, 959],
+        12: ["Überwasser", 0, 954, 1073, 1049, 1054, 1019],
+        13: ["Dom", 0, 1508, 1642, 1602, 1611, 1585],
+        14: ["Buddenturm", 0, 1401, 1538, 1546, 1583, 1589],
+        15: ["Martini", 0, 931, 1017, 1024, 1025, 1027],
+        21: ["Pluggendorf", 0, 2761, 3079, 3072, 3098, 3140],
+        22: ["Josef", 0, 5640, 6046, 6031, 6227, 6217],
+        23: ["Bahnhof", 0, 818, 895, 880, 936, 968],
+        24: ["Hansaplatz", 0, 4655, 5015, 5024, 4981, 5024],
+        25: ["Mauritz-West", 0, 3978, 4257, 4238, 4252, 4282],
+        26: ["Schlachthof", 0, 2856, 3062, 3101, 3139, 3145],
+        27: ["Kreuz", 0, 7678, 8287, 8266, 8223, 8235],
+        28: ["Neutor", 0, 2717, 3159, 3071, 3004, 3005],
+        29: ["Schloss", 0, 1185, 1314, 1295, 1304, 1303],
+        31: ["Aaseestadt", 0, 2990, 3108, 3132, 3159, 3121],
+        32: ["Geist", 0, 5093, 5342, 5328, 5350, 5411],
+        33: ["Schützenhof", 0, 4707, 5063, 5063, 5148, 5152],
+        34: ["Düesberg", 0, 3410, 3485, 3504, 3543, 3549],
+        43: ["Hafen", 0, 727, 801, 785, 793, 776],
+        44: ["Herz-Jesu", 0, 2759, 2911, 2926, 2904, 2956],
+        45: ["Mauritz-Mitte", 0, 5944, 6181, 6117, 6211, 6241],
+        46: ["Rumphorst", 0, 3990, 4153, 4212, 4286, 4265],
+        47: ["Uppenberg", 0, 4604, 4990, 5024, 5079, 5117],
+        51: ["Gievenbeck", 0, 8998, 10170, 10428, 10661, 10748],
+        52: ["Sentrup", 0, 3766, 4339, 4422, 4451, 4542],
+        54: ["Mecklenbeck", 0, 4407, 4697, 4206, 4306, 4570],
+        56: ["Albachten", 0, 2324, 2414, 2464, 2504, 2558],
+        57: ["Roxel", 0, 3953, 4185, 4254, 4264, 4336],
+        58: ["Nienberge", 0, 3196, 3395, 3391, 3440, 3433],
+        61: ["Coerde", 0, 4506, 4673, 4714, 4791, 4885],
+        62: ["Kinderhaus-Ost", 0, 2560, 2623, 2628, 2649, 2661],
+        63: ["Kinderhaus-West", 0, 4678, 4905, 4895, 4913, 4914],
+        68: ["Sprakel", 0, 1260, 1269, 1298, 1332, 1364],
+        71: ["Mauritz-Ost", 0, 5004, 5200, 5295, 5343, 5375],
+        76: ["Gelmer-Dyckburg", 0, 1536, 1584, 1625, 1658, 1682],
+        77: ["Handorf", 0, 3290, 3421, 3474, 3476, 3521],
+        81: ["Gremmendorf-West", 0, 2163, 2215, 2225, 2367, 2430],
+        82: ["Gremmendorf-Ost", 0, 2907, 2978, 3012, 3080, 3109],
+        86: ["Angelmodde", 0, 3528, 3626, 3655, 3831, 3857],
+        87: ["Wolbeck", 0, 3927, 4025, 4062, 4137, 4183],
+        91: ["Berg Fidel", 0, 2491, 2580, 2583, 2586, 2614],
+        95: ["Hiltrup-Ost", 0, 2968, 3016, 2986, 2995, 3014],
+        96: ["Hiltrup-Mitte", 0, 4947, 5093, 5150, 5164, 5166],
+        97: ["Hiltrup-West", 0, 3938, 4083, 4174, 4208, 4278],
+        98: ["Amelsbüren", 0, 2322, 2384, 2422, 2439, 2426]
       }
     }
   };
 
-  var currentDataSet = 'undef';
-  var currentSubSet = 0;
+  let currentDataSet = 'undef';
+  let currentSubSet = 0;
 
   function selectDataSet(dsname) {
     if (!dsname) {
       dsname = "arbeitslose-4";
     }
-    var myArray = /^(.+)-(\d+)$/g.exec(dsname);
+    let myArray = /^(.+)-(\d+)$/g.exec(dsname);
     currentDataSet = myArray ? myArray[1] : dsname;
     currentSubSet = myArray ? myArray[2] : openData[dsname].default;
     if (!openData[currentDataSet].headlines[currentSubSet]) {
@@ -384,10 +383,6 @@ var dataSet = function () {
     return openData[currentDataSet];
   }
 
-  function getData() {
-    return openData;
-  }
-
   function getTitle() {
     return openData[currentDataSet].title + " " + openData[currentDataSet].headlines[currentSubSet];
   }
@@ -396,19 +391,19 @@ var dataSet = function () {
     return openData[currentDataSet].unit;
   }
 
-  var limits = [];
+  let limits = [];
 
   function getLimits() {
-    var max = 0;
+    let max = 0;
     if (limits.length < 2) {
       $.each(openData[currentDataSet].data, function (key, arr) {
         if (max < arr[currentSubSet]) {
           max = arr[currentSubSet];
         }
       });
-      var numsteps = 10;
-      var step = max / numsteps;
-      for (var i = 0; i < numsteps; i++) {
+      let numsteps = 10;
+      let step = max / numsteps;
+      for (let i = 0; i < numsteps; i++) {
         limits[i] = Math.floor(i * step);
       }
     }
@@ -423,15 +418,15 @@ var dataSet = function () {
     if (!stadtteilNr) {
       alert("need stadtteiNr");
     }
-    var referenceDataSet = openData[currentDataSet].percent_of;
+    let referenceDataSet = openData[currentDataSet].percent_of;
     if (referenceDataSet) {
-      var referenceSubset = currentSubSet;
+      let referenceSubset = currentSubSet;
       if (referenceDataSet.indexOf('-') > 0) {
-        var temp = referenceDataSet.split('-');
+        let temp = referenceDataSet.split('-');
         referenceDataSet = temp[0];
         referenceSubset = temp[1];
       }
-      console.log("stadtteilNr", stadtteilNr)
+      console.log("stadtteilNr", stadtteilNr);
       console.log("currentData&Subset", currentDataSet, currentSubSet);
       console.log("referenceData&Subset", referenceDataSet, referenceSubset);
 
@@ -443,14 +438,14 @@ var dataSet = function () {
   }
 
   function getDataTable(stadtteilNr) {
-    var table = {};
-    var lastVal = 0;
-    var hls = openData[currentDataSet].headlines;
-    for (var i = 0; i < hls.length; i++) {
+    let table = {};
+    let lastVal = 0;
+    let hls = openData[currentDataSet].headlines;
+    for (let i = 0; i < hls.length; i++) {
       if (hls[i]) {
-        var currentVal = openData[currentDataSet]['data'][stadtteilNr][i];
-        var change = lastVal ? currentVal - lastVal : 0;
-        table[hls[i]] = [currentVal, change, (i == currentSubSet ? 1 : 0)];
+        let currentVal = openData[currentDataSet]['data'][stadtteilNr][i];
+        let change = lastVal ? currentVal - lastVal : 0;
+        table[hls[i]] = [currentVal, change, (i === currentSubSet ? 1 : 0)];
         lastVal = currentVal;
       }
     }
@@ -458,11 +453,11 @@ var dataSet = function () {
   }
 
   function getDataItemColor(stadtteilNr) {
-    var currentVal = getDataItem(stadtteilNr);
-    var a = getLimits();
-    var len = a.length;
-    var currentNr = len - 1;
-    for (var i = 0; i < len; i++) {
+    let currentVal = getDataItem(stadtteilNr);
+    let a = getLimits();
+    let len = a.length;
+    let currentNr = len - 1;
+    for (let i = 0; i < len; i++) {
       if (currentVal <= a[i]) {
         currentNr = i - 1;
         break;
@@ -473,45 +468,40 @@ var dataSet = function () {
 
   // list all datasets for "select dataset" popup
   function showDataSelector() {
+    const dataSelector = $("#dataSelector");
+
     $.each(openData, function (key, arr) {
-//    $("#dataSelector").append('<div class="nextone rtext"><b>' + arr.title + '</b>
-//    <button type="button" class="selector btn btn-default" data-id="'+key+'">Datensatz auswählen</button> </div><br clear="all" />');
+      let select_html = '<select class="selector-d form-control input-lg"><option value=""> Auswahl </option>';
 
-      var select_html = '<select class="selector-d form-control input-lg"><option value=""> Auswahl </option>';
-
-      var len = arr.headlines.length;
-      for (var i = 0; i < len; i++) {
-        if (!arr.headlines[i]) {
+      let len = arr.headlines.length;
+      for (let i = 0; i < len; i++) {
+        if (!arr.headlines[i])
           continue;
-        }
-        var thiskey = key + "-" + i;
+
+        let thiskey = key + "-" + i;
         select_html += '<option value="' + thiskey + '" ' +
-          (thiskey == (currentDataSet + '-' + currentSubSet) ? "selected" : "") + '> ' + arr.headlines[i] + '</option>';
+          (thiskey === (currentDataSet + '-' + currentSubSet) ? "selected" : "") + '> ' + arr.headlines[i] + '</option>';
       }
       select_html += '</select>';
 
-      $("#dataSelector").append('<div class="hover-' + key + ' row topmargin">' +
+      dataSelector.append('<div class="hover-' + key + ' row topmargin">' +
         '<div class="col-md-8">' +
         '<button type="button" data-id="' + key + '" class="selector btn ' +
-        ((currentDataSet == key) ? "btn-primary" : "btn-default") + ' btn-lg btn-block">' + arr.title + '</button>' +
+        ((currentDataSet === key) ? "btn-primary" : "btn-default") + ' btn-lg btn-block">' + arr.title + '</button>' +
         '</div><div class="col-md-4">' + select_html + '</div></div>');
+
       if (arr.description) {
-        var classname = 'show-' + key;
-        $("#dataSelector").append('<div class="row hide-i ' + classname + '"><div class="col-md-12">' + arr.description + '</div></div>');
+        let classname = 'show-' + key;
+        dataSelector.append('<div class="row hide-i ' + classname + '"><div class="col-md-12">' + arr.description + '</div></div>');
         $('.hover-' + key).hover(
-          function () {
-            $('.' + classname).fadeIn();
-          },
-          function () {
-            $('.' + classname).fadeOut();
-          }
+          function () { $('.' + classname).fadeIn(); },
+          function () { $('.' + classname).fadeOut(); }
         );
         $("." + classname).hide();
-
       }
 
     });
-    $("#dataSelector").append('<br clear="both" />');
+    dataSelector.append('<br clear="both" />');
     $(".selector").click(function () {
       location.href = "?" + $(this).data('id');
     });
@@ -534,7 +524,7 @@ var dataSet = function () {
   };
 }();
 
-var showData = location.search.substr(1);
+let showData = location.search.substr(1);
 if (!showData) {
   $('#myModal').modal('show');
 }
@@ -544,7 +534,7 @@ function getColor(i) {
   return mapColors[i];
 }
 
-var map = L.map('map').setView([51.962, 7.629], 11);
+let map = L.map('map').setView([51.962, 7.629], 11);
 
 L.tileLayer(
   'http://{s}.tiles.mapbox.com/v3/tomrocket.m8l1e9gm/{z}/{x}/{y}.png', {
@@ -558,16 +548,16 @@ L.tileLayer(
 
 
 // control that shows state info on hover
-var info = L.control();
+let info = L.control();
 
-info.onAdd = function (map) {
+info.onAdd = function () {
   this._div = L.DomUtil.create('div', 'info');
   this.update();
   return this._div;
 };
 
 info.update = function (props) {
-  var html = '<strong>' + dataSet.getTitle() + '</strong>';
+  let html = '<strong>' + dataSet.getTitle() + '</strong>';
   html = html + (props ?
     '<b>' + props.Name + '</b><br />' + dataSet.getDataItem(props.Nr) + ' ' + dataSet.getUnit() + ' ' + dataSet.getPercent(props.Nr)
     : 'Navigieren Sie über einen Stadtteil');
@@ -575,27 +565,26 @@ info.update = function (props) {
 };
 info.addTo(map);
 
-
-var extraInfo = L.control({position: 'bottomleft'});
-extraInfo.onAdd = function (map) {
+let extraInfo = L.control({position: 'bottomleft'});
+extraInfo.onAdd = function () {
   this._div = L.DomUtil.create('div', 'extras');
   this.update();
   return this._div;
 };
 extraInfo.update = function (props) {
-  var html = '';
+  let html = '';
 
   console.log("props", props);
   // draw nice history/detail table
   if (props) {
-    var hls = dataSet.getDataTable(props.Nr);
-    var tbl = dataSet.getDataSet();
-    var htitle = tbl.tableTitle || "Historie";
+    let hls = dataSet.getDataTable(props.Nr);
+    let tbl = dataSet.getDataSet();
+    let htitle = tbl.tableTitle || "Historie";
     html += '<div class="history">' + htitle + '</div> <table>';
     $.each(hls, function (key, value) {
       html += value[2] ? '<tr class="high">' : '<tr>';
       html += '<td>' + key + ':</td><th>' + value[0] + '</th>';
-      if (tbl.extra == "showChange") {
+      if (tbl.extra === "showChange") {
         html += '<td class="change ' + (value[1] > 0 ? "green" : "red") + '">' + (value[1] ? (value[1] > 0 ? '+' : '') + value[1] : '') + '</td>';
       }
       html += '</tr>';
@@ -618,7 +607,7 @@ function style(feature) {
 }
 
 function highlightFeature(e) {
-  var layer = e.target;
+  let layer = e.target;
 
   layer.setStyle({
     weight: 5,
@@ -635,7 +624,7 @@ function highlightFeature(e) {
   extraInfo.update(layer.feature.properties);
 }
 
-var geojson;
+let geojson;
 
 function resetHighlight(e) {
   geojson.resetStyle(e.target);
@@ -651,7 +640,7 @@ function onEachFeature(feature, layer) {
   });
 }
 
-var lastClickedLayer;
+let lastClickedLayer;
 
 //To make it work on touch devices
 function clickUpdate(e) {
@@ -683,16 +672,15 @@ geojson = L.geoJson(stadtteileMuenster2, {
 map.attributionControl.addAttribution('Jahresstatistiken &copy; <a href="http://www.muenster.de/stadt/stadtplanung/zahlen.html">Stadt Münster</a>');
 
 
-var legend = L.control({position: 'bottomright'});
+let legend = L.control({position: 'bottomright'});
 
-legend.onAdd = function (map) {
-
-  var div = L.DomUtil.create('div', 'info legend'),
+legend.onAdd = function () {
+  let div = L.DomUtil.create('div', 'info legend'),
     grades = dataSet.getLimits(),
     labels = [],
     from, to;
 
-  for (var i = 0; i < grades.length; i++) {
+  for (let i = 0; i < grades.length; i++) {
     from = grades[i];
     to = grades[i + 1];
 
@@ -701,7 +689,8 @@ legend.onAdd = function (map) {
       from + (to ? '&ndash;' + to : '+'));
   }
 
-  div.innerHTML = labels.join('<br>') + '<button type="button" class="changer btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Datensatz ändern</button>';
+  div.innerHTML = labels.join('<br>') + '<button type="button" class="changer btn btn-primary btn-lg" ' +
+    'data-toggle="modal" data-target="#myModal">Datensatz ändern</button>';
   return div;
 };
 
