@@ -66,18 +66,40 @@ $.when.apply($, jsonCalls).done(function() {
     function getLimits() {
       let max = 0;
       if (limits.length < 2) {
-        $.each(openData[currentDataSet].data, function (key, arr) {
-          if (max < arr[currentSubSet]) {
-            max = arr[currentSubSet];
-          }
-        });
-        let numsteps = 10;
-        let step = max / numsteps;
-        for (let i = 0; i < numsteps; i++) {
-          limits[i] = Math.floor(i * step);
+        let dataRelative = 'absolute';
+        if (location.search.substr(1).split('&').length > 1)
+          dataRelative = location.search.substr(1).split('&')[1];
+
+        if (dataRelative === 'absolute')
+        {
+          $.each(openData[currentDataSet].data, function (key, arr) {
+            if (max < arr[currentSubSet])
+              max = arr[currentSubSet];
+          });
+
+          let numsteps = 10;
+          let step = max / numsteps;
+          for (let i = 0; i < numsteps; i++)
+            limits[i] = Math.floor(i * step);
+        }
+        else
+        {
+          $.each(openData[currentDataSet].data, function (key, arr) {
+            if (max < getPercent(key))
+              max = getPercent(key);
+          });
+
+          let numsteps = 10;
+          let step = max / numsteps;
+          for (let i = 0; i < numsteps; i++)
+            limits[i] = Math.floor(i * step * 10) / 10;
         }
       }
       return limits;
+    }
+
+    function getPercentOf() {
+      return openData[currentDataSet].percent_of;
     }
 
     function getDataItem(stadtteilNr) {
@@ -101,7 +123,7 @@ $.when.apply($, jsonCalls).done(function() {
         console.log("referenceData&Subset", referenceDataSet, referenceSubset);
 
         let percentValue = openData[currentDataSet]['data'][stadtteilNr][currentSubSet] / openData[referenceDataSet]['data'][stadtteilNr][referenceSubset] * 100;
-        return "(" + percentValue.toFixed(2) + "%)";
+        return parseFloat(percentValue.toFixed(2));
       } else {
         return ""
       }
@@ -123,7 +145,16 @@ $.when.apply($, jsonCalls).done(function() {
     }
 
     function getDataItemColor(stadtteilNr) {
-      let currentVal = getDataItem(stadtteilNr);
+      let dataRelative = 'absolute';
+      if (location.search.substr(1).split('&').length > 1)
+        dataRelative = location.search.substr(1).split('&')[1];
+
+      let currentVal;
+      if (dataRelative === 'absolute')
+        currentVal = getDataItem(stadtteilNr);
+      else
+        currentVal = getPercent(stadtteilNr);
+
       let a = getLimits();
       let len = a.length;
       let currentNr = len - 1;
@@ -190,11 +221,12 @@ $.when.apply($, jsonCalls).done(function() {
       getDataItem: getDataItem,
       getDataTable: getDataTable,
       selectDataSet: selectDataSet,
-      getDataItemColor: getDataItemColor
+      getDataItemColor: getDataItemColor,
+      getPercentOf: getPercentOf,
     };
   }();
 
-  let showData = location.search.substr(1);
+  let showData = location.search.substr(1).split('&')[0];
   if (!showData)
     $('#myModal').modal('show');
 
@@ -228,9 +260,16 @@ $.when.apply($, jsonCalls).done(function() {
 
   info.update = function (props) {
     let html = '<strong>' + dataSet.getTitle() + '</strong>';
-    html = html + (props ?
-      '<b>' + props.Name + '</b><br />' + dataSet.getDataItem(props.Nr) + ' ' + dataSet.getUnit() + ' ' + dataSet.getPercent(props.Nr)
-      : 'Navigieren Sie über einen Stadtteil');
+
+    if (props) {
+      let percent = dataSet.getPercent(props.Nr);
+      if (percent !== '')
+        percent =  "(" + percent + "%)";
+
+      html += '<b>' + props.Name + '</b><br/>' + dataSet.getDataItem(props.Nr) + ' ' + dataSet.getUnit() + ' ' + percent;
+    }
+    else
+      html += 'Navigieren Sie über einen Stadtteil';
     this._div.innerHTML = html;
   };
   info.addTo(map);
@@ -341,7 +380,6 @@ $.when.apply($, jsonCalls).done(function() {
 
   map.attributionControl.addAttribution('Jahresstatistiken &copy; <a href="http://www.muenster.de/stadt/stadtplanung/zahlen.html">Stadt Münster</a>');
 
-
   let legend = L.control({position: 'bottomright'});
 
   legend.onAdd = function () {
@@ -354,17 +392,39 @@ $.when.apply($, jsonCalls).done(function() {
       from = grades[i];
       to = grades[i + 1];
 
-      labels.push(
-        '<i style="background:' + getColor(i) + '"></i> ' +
-        from + (to ? '&ndash;' + to : '+'));
+      labels.push('<i style="background:' + getColor(i) + '"></i> ' + from + (to ? '&ndash;' + to : '+'));
     }
 
-    div.innerHTML = labels.join('<br>') + '<button type="button" class="changer btn btn-primary btn-lg" ' +
-      'data-toggle="modal" data-target="#myModal">Datensatz ändern</button>';
+    let relativeSwitcher = '';
+    if (dataSet.getPercentOf()) {
+      let dataRelative = 'absolute';
+      if (location.search.substr(1).split('&').length > 1)
+        dataRelative = location.search.substr(1).split('&')[1];
+
+      relativeSwitcher = '<label class="radio-label">' +
+      '<input type="radio" name="dataRelative" value="absolute"' + (dataRelative === 'absolute' ? 'checked' : '') + '>' +
+      'absolut' +
+      '</label>' +
+      '<label class="radio-label">' +
+      '<input type="radio" name="dataRelative" value="relative"' + (dataRelative === 'relative' ? 'checked' : '') + '>' +
+      'relativ' +
+      '</label>' +
+      '<br>';
+    }
+    div.innerHTML = relativeSwitcher +
+      labels.join('<br>') +
+      '<button type="button" class="changer btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Datensatz ändern</button>';
+
     return div;
   };
 
   legend.addTo(map);
+
+  // add eventlistener for change
+  $('input[name="dataRelative"]').on('change', function () {
+    const set = location.search.substr(1).split('&')[0];
+    location.href = '?' + set + '&' + $('input[name="dataRelative"]:checked').val();
+  });
 }).fail(function (error) {
   alert('Error while reading data:' + JSON.stringify(error));
 });
