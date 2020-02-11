@@ -86,6 +86,15 @@ tr.high td {
   width: 100%;
 }
 
+.radio-label {
+  font-weight: 500;
+  font-size: 2rem;
+  margin: 0 1rem 1rem 0;
+}
+.radio-label input[type=radio] {
+  margin-right: 5px;
+}
+
 @media (min-width: 1000px) {
   .info {
     font-size: 24px;
